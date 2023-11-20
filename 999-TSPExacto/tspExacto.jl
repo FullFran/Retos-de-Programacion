@@ -31,12 +31,33 @@ Añade también el tiempo de ejecución a la salida.
 using CSV
 using DataFrames
 using IterTools
+using LinearAlgebra
 
 # Leemos los datos
-df = CSV.File("tspData.csv", header=false) |> DataFrame
+df = CSV.File("tspData.csv", header=false, types=[String, BigFloat, BigFloat]) |> DataFrame
 
-# Almacenamos los nodos en un array
+# Convertimos los nodos en una matrix para operar
+# de forma más eficiente 
+data = Matrix(df[:, 2:3])
+sqrt((data[1,1]-data[8,1])^2 + (data[1,2]-data[8,2])^2)
+# Definimos la distancia entre dos nodos:
+function dist(xi, xj)
+    return norm(xi - xj)
+end
 
+# Definimos la distancia total para el camino
+function H(x)
+    d = 0
+    for i in 1:length(x[:,1])
+        print(i)
+        try
+            d += dist(x[i], x[i+1])
+        catch
+            d += dist(x[i], x[1])
+        end
+    end
+    return d
+end
 
-
-
+print(H(data))
+ 

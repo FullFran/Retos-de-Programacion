@@ -66,6 +66,7 @@ def TSP(x):
         d = H(c)
         if d < dist_optima:
             optimo = c
+
             dist_optima = d
     return optimo[:,0], dist_optima
 
